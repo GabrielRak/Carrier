@@ -8,6 +8,7 @@ import Parcels from "../views/Parcels.vue";
 import Send from "../views/Send.vue";
 import Profile from "../views/Profile.vue";
 import Carrer from "../views/Carrer.vue";
+import Package from "../views/Package.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -55,6 +56,12 @@ const router = createRouter({
       component: Carrer,
       meta: { requiresAuth: true },
     },
+    {
+      path:'/package/:packageId',
+      name:"package",
+      component:Package,
+      props:true,
+    }
   ],
 });
 

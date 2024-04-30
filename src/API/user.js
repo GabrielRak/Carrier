@@ -21,7 +21,6 @@ export const setUser_Data = async (data) => {
     const ref = await setDoc(
       docRef,
       {
-        email: data.email,
         name: data.name,
         surrname: data.surrname,
         phone: data.phone_number,

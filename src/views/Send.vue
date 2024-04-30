@@ -1,32 +1,28 @@
 <template>
-  <div>
+  <div class="text-center">
     <Header text="Send" />
-    <form @submit.prevent="sendParcel">
-      <div>
-        <label for="phone_number" class="font-bold">Phone number</label><br />
-        <input
+    <div class="mt-16">
+      <form @submit.prevent="sendParcel">
+        <label for="phone_number">Phone number</label>
+        <StyledInput
           type="text"
           id="phone_number"
-          class="bg-gray-300 text-center w-56 rounded-2xl px-4 py-2 text-sm mb-6"
           v-model="phone_number"
           placeholder="+48 600 600 006"
         />
-      </div>
-      <div>
-        <label for="email" class="font-bold">Email</label><br />
-        <input
-          type="text"
-          id="phone_number"
-          class="bg-gray-300 text-center w-56 rounded-2xl px-4 py-2 text-sm mb-6"
+        <label for="email">Email</label>
+        <StyledInput
+          type="email"
+          id="email"
           v-model="email"
           placeholder="pieknabiedronka@interia.pl"
         />
-      </div>
       <div>
         <select
-          v-model="inbox"
-          class="bg-gray-300 text-center w-56 rounded-2xl px-4 py-2 text-sm mb-6"
+        v-model="inbox"
+        class="bg-gray-300 text-center w-56 rounded-2xl px-4 py-2 text-sm mb-6"
         >
+        <option selected disabled value="Inbox">Inbox</option>
           <option v-for="ok in inboxes" :key="ok" :value="ok">
             {{ ok }}
           </option>
@@ -36,12 +32,14 @@
         Send parcel
       </button>
     </form>
+  </div>
     <Navbar />
   </div>
 </template>
 <script>
 import Header from "../components/Header.vue";
 import Navbar from "../components/Navbar.vue";
+import StyledInput from "../components/StyledInput.vue";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { computed, onBeforeMount } from "vue";
@@ -49,14 +47,16 @@ export default {
   components: {
     Header,
     Navbar,
+    StyledInput,
   },
+
   setup() {
     const store = useStore();
     const phone_number = ref("");
     const email = ref("");
-    const uid = computed(() => store.state.auth.uid);
-    const phone = computed(() => store.state.user.phone_number);
     const inbox = ref("");
+    const uid = computed(() => store.state.auth.uid);
+    const phone = computed(() => store.state.user.phone);
     onBeforeMount(() => {
       store.dispatch("parcels/fetchInboxes");
     });

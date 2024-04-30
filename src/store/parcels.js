@@ -1,10 +1,10 @@
-import { data } from "autoprefixer";
 import {
   fetchExistingInboxes,
   fetchOrdered_parcels,
   fetchSended_parcels,
   sendPackage,
 } from "../API/parcels";
+import router from "../router";
 const state = {
   orderedParcels: [],
   sendedParcels: [],
@@ -60,8 +60,10 @@ const actions = {
       .catch((error) => {
         console.error(error);
       });
-  },
+      router.push("/parcels")
+  }
 };
+
 
 export default {
   namespaced: true,

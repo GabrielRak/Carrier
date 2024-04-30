@@ -16,7 +16,9 @@ const state = {
 const mutations = {
   setUser(state, payload) {
     state.uid = payload.uid;
-    state.authorized = payload.is_authorized;
+  },
+  setAuthorized(state, is_authorized) {
+    state.authorized = is_authorized;
   },
   setAuthError(state, payload) {
     state.authError = payload;
@@ -28,10 +30,11 @@ const actions = {
     createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
         commit("setUser", user);
-        commit("setAuthError", null);
+        commit("setAuthorized", true);
         const docRef = doc(db, "users", user.uid);
         setDoc(docRef, {
           uid: user.uid,
+          email: email,
         });
         router.push("/profile");
       })
@@ -47,11 +50,12 @@ const actions = {
           is_authorized: true,
         };
         commit("setUser", payload);
+        commit("setAuthorized", true);
         commit("setAuthError", null);
         router.push("/profile");
       })
       .catch(() => {
-        commit("setAuthError", "Bruteforcing or wha?");
+        commit("setAuthError", "Failed");
       });
   },
   logout({ commit }) {
@@ -64,7 +68,7 @@ const actions = {
       router.push("/");
       commit("setUser", payload);
     } catch (error) {
-      commit("setAuthError", "Brueforcing or wha?");
+      commit("setAuthError", "Failed");
     }
   },
   observeAuthState({ commit }) {
