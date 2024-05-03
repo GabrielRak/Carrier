@@ -14,8 +14,8 @@ const state = {
 };
 
 const mutations = {
-  setUser(state, payload) {
-    state.uid = payload.uid;
+  setUser(state, email) {
+    state.uid = email;
   },
   setAuthorized(state, is_authorized) {
     state.authorized = is_authorized;
@@ -31,31 +31,27 @@ const actions = {
       .then(({ user }) => {
         commit("setUser", user);
         commit("setAuthorized", true);
-        const docRef = doc(db, "users", user.uid);
+        const docRef = doc(db, "users", email);
         setDoc(docRef, {
           uid: user.uid,
           email: email,
         });
-        router.push("/profile");
+        router.push("/login");
       })
       .catch(() => {
-        commit("setAuthError", "Failed");
+        commit("setAuthError", "Address email already taken");
       });
   },
   async login({ commit }, { email, password }) {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        const payload = {
-          uid: user.uid,
-          is_authorized: true,
-        };
-        commit("setUser", payload);
+        commit("setUser", email);
         commit("setAuthorized", true);
         commit("setAuthError", null);
         router.push("/profile");
       })
       .catch(() => {
-        commit("setAuthError", "Failed");
+        commit("setAuthError", "Wrong Credentials");
       });
   },
   logout({ commit }) {

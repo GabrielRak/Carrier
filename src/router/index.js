@@ -7,7 +7,6 @@ import Sign_up from "../views/Sign_up.vue";
 import Parcels from "../views/Parcels.vue";
 import Send from "../views/Send.vue";
 import Profile from "../views/Profile.vue";
-import Carrer from "../views/Carrer.vue";
 import Package from "../views/Package.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,12 +47,6 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: Profile,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/carrer",
-      name: "carrer",
-      component: Carrer,
       meta: { requiresAuth: true },
     },
     {

@@ -1,5 +1,5 @@
 import { db } from "../firebase/init";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 
 export const fetchData = async (uid) => {
   try {
@@ -30,5 +30,16 @@ export const setUser_Data = async (data) => {
     );
   } catch (error) {
     console.error("Error while setting user data" + error);
+  }
+};
+
+export const alterUser_Inbox = async (data) => {
+  try {
+    const docRef = doc(db, "users", data.uid);
+    const ref = await updateDoc(docRef, {
+      inbox: data.inbox,
+    });
+  } catch (error) {
+    console.error(error);
   }
 };

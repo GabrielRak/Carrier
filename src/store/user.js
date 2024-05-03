@@ -1,4 +1,4 @@
-import { fetchData, setUser_Data } from "../API/user";
+import { alterUser_Inbox, fetchData, setUser_Data } from "../API/user";
 const state = {
   form: false,
   name: null,
@@ -19,6 +19,9 @@ const mutations = {
   setForm(state, value) {
     state.form = value;
   },
+  setInbox(state,payload){
+    state.inbox = payload;
+  }
 };
 
 const actions = {
@@ -32,18 +35,27 @@ const actions = {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   },
   setUser_data({ commit }, data) {
     setUser_Data(data)
-      .then((response) => {
+      .then(() => {
         console.log("Succes");
       })
       .catch((error) => {
         console.error(error);
       });
   },
+  alterUserInbox({commit},data){
+    alterUser_Inbox(data)
+    .then(()=>{
+      commit("setInbox",data.inbox)
+    })
+    .catch((error) =>{
+      console.error(error)
+    })
+  }
 };
 
 const getters = {

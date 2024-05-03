@@ -2,13 +2,17 @@ import {
   fetchExistingInboxes,
   fetchOrdered_parcels,
   fetchSended_parcels,
+  fetchPackage_details,
   sendPackage,
+  remove_package,
 } from "../API/parcels";
 import router from "../router";
 const state = {
   orderedParcels: [],
   sendedParcels: [],
   inboxes: [],
+  package: null,
+  errorMsg: "",
 };
 
 const mutations = {
@@ -18,8 +22,14 @@ const mutations = {
   setSended_parcels(state, payload) {
     state.sendedParcels = payload;
   },
+  setErrorMsg(state, payload) {
+    state.errorMsg = payload;
+  },
   setInboxes(state, payload) {
     state.inboxes = payload;
+  },
+  setPackage(state, payload) {
+    state.package = payload;
   },
 };
 
@@ -30,7 +40,7 @@ const actions = {
         commit("setOrdered_parcels", response);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   },
   fetchInboxes({ commit }) {
@@ -39,7 +49,7 @@ const actions = {
         commit("setInboxes", response);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   },
   getSended_parcels({ commit }, { phone_number }) {
@@ -48,22 +58,40 @@ const actions = {
         commit("setSended_parcels", response);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+      });
+  },
+
+  fetchPackageDetails({ commit }, data) {
+    fetchPackage_details(data)
+      .then((response) => {
+        commit("setPackage", response);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   },
 
   sendParcel({ commit }, data) {
     sendPackage(data)
-      .then(() => {
-        console.log("Success");
+      .then((response) => {
+        commit("setErrorMsg", response);
       })
       .catch((error) => {
         console.error(error);
       });
-      router.push("/parcels")
-  }
-};
+  },
 
+  removePackage({ commit }, data) {
+    remove_package(data)
+      .then(() => {
+        console.log("Sucessfuly removed data from the databsae");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+};
 
 export default {
   namespaced: true,

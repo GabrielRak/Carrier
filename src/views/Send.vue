@@ -17,22 +17,23 @@
           v-model="email"
           placeholder="pieknabiedronka@interia.pl"
         />
-      <div>
-        <select
-        v-model="inbox"
-        class="bg-gray-300 text-center w-56 rounded-2xl px-4 py-2 text-sm mb-6"
+        <label for="title">Title</label>
+        <StyledInput
+          type="text"
+          id="title"
+          v-model="title"
+          placeholder="Big package*"
+        />
+
+        <button
+          type="submit"
+          class="text-white bg-emerald-500 px-4 py-2 font-md"
         >
-        <option selected disabled value="Inbox">Inbox</option>
-          <option v-for="ok in inboxes" :key="ok" :value="ok">
-            {{ ok }}
-          </option>
-        </select>
-      </div>
-      <button type="submit" class="text-white bg-emerald-500 px-4 py-2 font-md">
-        Send parcel
-      </button>
-    </form>
-  </div>
+          Send parcel</button
+        ><br />
+        {{ error }}
+      </form>
+    </div>
     <Navbar />
   </div>
 </template>
@@ -54,23 +55,24 @@ export default {
     const store = useStore();
     const phone_number = ref("");
     const email = ref("");
-    const inbox = ref("");
+    const title = ref("");
     const uid = computed(() => store.state.auth.uid);
-    const phone = computed(() => store.state.user.phone);
+    const phone = computed(() => store.state.user.phone_number);
     onBeforeMount(() => {
       store.dispatch("parcels/fetchInboxes");
     });
     const inboxes = computed(() => store.state.parcels.inboxes);
+    const error = computed(() => store.state.parcels.errorMsg);
     const sendParcel = async () => {
       store.dispatch("parcels/sendParcel", {
         phone_number: phone_number.value,
-        inbox: inbox.value,
         email: email.value,
         uid: uid.value,
+        title: title.value,
         phone: phone.value,
       });
     };
-    return { sendParcel, store, phone_number, inbox, email, inboxes };
+    return { sendParcel, store, phone_number, email, inboxes, title, error };
   },
 };
 </script>

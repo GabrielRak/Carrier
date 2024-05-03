@@ -1,7 +1,6 @@
 <template>
   <div>
     <input
-      :class="computedClass"
       :type="type"
       :placeholder="placeholder"
       :value="modelValue"
