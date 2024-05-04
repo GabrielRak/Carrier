@@ -6,7 +6,6 @@ import {
   sendPackage,
   remove_package,
 } from "../API/parcels";
-import router from "../router";
 const state = {
   orderedParcels: [],
   sendedParcels: [],
@@ -39,27 +38,18 @@ const actions = {
       .then((response) => {
         commit("setOrdered_parcels", response);
       })
-      .catch((error) => {
-        console.error(error);
-      });
   },
   fetchInboxes({ commit }) {
     fetchExistingInboxes()
       .then((response) => {
         commit("setInboxes", response);
       })
-      .catch((error) => {
-        console.error(error);
-      });
   },
   getSended_parcels({ commit }, { phone_number }) {
     fetchSended_parcels(phone_number)
       .then((response) => {
         commit("setSended_parcels", response);
       })
-      .catch((error) => {
-        console.error(error);
-      });
   },
 
   fetchPackageDetails({ commit }, data) {
@@ -82,10 +72,11 @@ const actions = {
       });
   },
 
-  removePackage({ commit }, data) {
+  removePackage({}, data) {
     remove_package(data)
       .then(() => {
         console.log("Sucessfuly removed data from the databsae");
+        // Also there's gogin to be fetch for giving feedback to sender that the parcel was collected
       })
       .catch((error) => {
         console.log(error);

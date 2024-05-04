@@ -9,6 +9,20 @@
       <p>{{ userData.name }} {{ userData.surrname }}</p>
       <p>{{ userData.phone_number }}</p>
       <p>{{ userData.inbox }}</p>
+      <div v-if="isAdmin">
+        <RouterLink to="/admin"
+          ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
+            Adminuj
+          </button></RouterLink
+        >
+      </div>
+      <div v-if="isCarrier">
+        <RouterLink to="/carrier"
+          ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
+            Carrieruj
+          </button></RouterLink
+        >
+      </div>
       <button
         class="bg-emerald-400 text-white py-2 w-48 my-4"
         @click="editView = !editView"
@@ -40,6 +54,7 @@
   </div>
   <Navbar />
 </template>
+
 <script>
 import { computed, onBeforeMount, ref } from "vue";
 import Header from "../components/Header.vue";
@@ -62,14 +77,16 @@ export default {
     const inbox = ref();
     onBeforeMount(() => {
       store.dispatch("user/getUserData", { uid: uid.value });
-      console.log(uid);
+      store.dispatch("user/checkAdmin", uid.value);
+      store.dispatch("user/checkCarrier", uid.value);
       store.dispatch("parcels/fetchInboxes");
     });
 
     const userData = computed(() => store.state.user);
     const firstLogin = computed(() => store.state.user.form);
     const inboxes = computed(() => store.state.parcels.inboxes);
-
+    const isAdmin = computed(() => store.state.user.admin);
+    const isCarrier = computed(() => store.state.user.carrier);
     const setUser_data = (formData) => {
       store.dispatch("user/setUser_data", {
         name: formData.name,
@@ -105,6 +122,8 @@ export default {
       inbox,
       inboxes,
       changeInbox,
+      isAdmin,
+      isCarrier,
     };
   },
 };

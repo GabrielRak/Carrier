@@ -1,5 +1,14 @@
 import { db } from "../firebase/init";
-import { setDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  collection,
+  getDocs,
+  query,
+  where
+} from "firebase/firestore";
 
 export const fetchData = async (uid) => {
   try {
@@ -39,6 +48,32 @@ export const alterUser_Inbox = async (data) => {
     const ref = await updateDoc(docRef, {
       inbox: data.inbox,
     });
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const check_admin = async (email) => {
+  try {
+    const q = query(collection(db, "admins"), where("email", "==",email));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty){
+      return false
+    }else{
+      return true
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+export const check_carrier = async (email) => {
+  try {
+    const q = query(collection(db, "carriers"), where("email", "==",email));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty){
+      return false
+    }else{
+      return true
+    }
   } catch (error) {
     console.error(error);
   }

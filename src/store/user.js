@@ -1,4 +1,5 @@
-import { alterUser_Inbox, fetchData, setUser_Data } from "../API/user";
+// Seems that's not mandatory to use then catch with every async function that's why in this version this unnecseary parts of code had been deleted
+import { alterUser_Inbox, check_admin, check_carrier, fetchData, setUser_Data } from "../API/user";
 const state = {
   form: false,
   name: null,
@@ -6,6 +7,8 @@ const state = {
   email: null,
   inbox: null,
   phone_number: null,
+  admin:false,
+  carrier:false,
 };
 
 const mutations = {
@@ -21,6 +24,12 @@ const mutations = {
   },
   setInbox(state,payload){
     state.inbox = payload;
+  },
+  setAdmin(state,value){
+    state.admin = value;
+  }  ,
+  setCarrier(state,value){
+    state.carrier = value;
   }
 };
 
@@ -34,15 +43,9 @@ const actions = {
           commit("setUserData", response);
         }
       })
-      .catch((error) => {
-        console.error(error);
-      });
   },
-  setUser_data({ commit }, data) {
+  setUser_data({}, data) {
     setUser_Data(data)
-      .then(() => {
-        console.log("Succes");
-      })
       .catch((error) => {
         console.error(error);
       });
@@ -52,8 +55,19 @@ const actions = {
     .then(()=>{
       commit("setInbox",data.inbox)
     })
-    .catch((error) =>{
-      console.error(error)
+  },
+  checkAdmin({commit},email)
+  {
+    check_admin(email)
+    .then((response)=>{
+      commit("setAdmin",response)
+    })
+  },
+  checkCarrier({commit},email)
+  {
+    check_carrier(email)
+    .then((response)=>{
+      commit("setCarrier",response)
     })
   }
 };

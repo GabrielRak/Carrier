@@ -8,6 +8,8 @@ import Parcels from "../views/Parcels.vue";
 import Send from "../views/Send.vue";
 import Profile from "../views/Profile.vue";
 import Package from "../views/Package.vue";
+import Admin from "../views/Admin.vue";
+import Carrier from "../views/Carrier.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -50,18 +52,31 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path:'/package/:packageId',
-      name:"package",
-      component:Package,
-      props:true,
+      path: "/package/:packageId",
+      name: "package",
+      component: Package,
+      props: true,
+    },
+    {
+      path:"/admin",
+      name:"dashboard",
+      component:Admin,
+      meta:{requiresAdmin:true}
+    },
+    {
+      path:"/carrier",
+      name:"carrier",
+      component:Carrier,
+      meta:{requiresCarrier:true}
     }
   ],
 });
 
 router.beforeEach((to, form, next) => {
   if (
-    to.matched.some((record) => record.meta.requiresAuth) &&
-    !store.state.auth.authorized
+    (to.matched.some((record) => record.meta.requiresAuth) && !store.state.auth.authorized) || 
+    (to.matched.some((record) => record.meta.requiresAdmin) && !store.state.user.admin) ||
+    (to.matched.some((record) => record.meta.requiresCarrier) && !store.state.user.carrier)
   ) {
     next({ name: "Sign_in" });
   } else {

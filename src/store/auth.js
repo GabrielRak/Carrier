@@ -14,11 +14,9 @@ const state = {
 };
 
 const mutations = {
-  setUser(state, email) {
-    state.uid = email;
-  },
-  setAuthorized(state, is_authorized) {
-    state.authorized = is_authorized;
+  setUser(state, payload) {
+    state.uid = payload.email;
+    state.authorized = payload.authorized;
   },
   setAuthError(state, payload) {
     state.authError = payload;
@@ -29,8 +27,10 @@ const actions = {
   register({ commit }, { email, password }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        commit("setUser", user);
-        commit("setAuthorized", true);
+        commit("setUser",{
+          email:email,
+          authorized:true,
+        });
         const docRef = doc(db, "users", email);
         setDoc(docRef, {
           uid: user.uid,
@@ -45,9 +45,10 @@ const actions = {
   async login({ commit }, { email, password }) {
     signInWithEmailAndPassword(auth, email, password)
       .then(({ user }) => {
-        commit("setUser", email);
-        commit("setAuthorized", true);
-        commit("setAuthError", null);
+        commit("setUser",{
+          email:email,
+          authorized:true,
+        });
         router.push("/profile");
       })
       .catch(() => {
@@ -57,12 +58,11 @@ const actions = {
   logout({ commit }) {
     try {
       signOut(auth);
-      const payload = {
-        uid: null,
-        is_authorized: false,
-      };
+      commit("setUser",{
+        email:null,
+        authorized:false,
+      });
       router.push("/");
-      commit("setUser", payload);
     } catch (error) {
       commit("setAuthError", "Failed");
     }

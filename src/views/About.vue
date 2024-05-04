@@ -72,19 +72,6 @@ import { RouterLink } from "vue-router";
     </div>
   </div>
 </template>
-<style scoped>
-li {
-  display: flex;
-  align-items: center;
-  margin: 12px;
-}
+<style>
 
-li::before {
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  content: "";
-  background-color: #00cf54;
-  border-radius: 100%;
-}
 </style>
