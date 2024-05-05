@@ -5,6 +5,7 @@ import {
   fetchPackage_details,
   sendPackage,
   remove_package,
+  getImageUrl,
 } from "../API/parcels";
 const state = {
   orderedParcels: [],
@@ -30,6 +31,9 @@ const mutations = {
   setPackage(state, payload) {
     state.package = payload;
   },
+  setImageUrl(state, payload) {
+    state.imageUrl = payload;
+  }
 };
 
 const actions = {
@@ -56,6 +60,11 @@ const actions = {
     fetchPackage_details(data)
       .then((response) => {
         commit("setPackage", response);
+        if(response.image) {
+          this.dispatch("parcels/getImageUrl", response.image);
+        } else {
+          commit("setImageUrl", "");
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -82,6 +91,16 @@ const actions = {
         console.log(error);
       });
   },
+
+  getImageUrl({ commit }, data) {
+    getImageUrl(data)
+      .then((response) => {
+        commit("setImageUrl", response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
 };
 
 export default {

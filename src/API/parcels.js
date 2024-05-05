@@ -1,5 +1,6 @@
-import { db } from "../firebase/init";
+import { db, storage } from "../firebase/init";
 import { collection,getDocs,setDoc,doc,getDoc,deleteDoc} from "firebase/firestore";
+import { getDownloadURL, ref as storageRef ,uploadBytes } from "firebase/storage";
 import { nanoid } from "nanoid";
 
 export const fetchOrdered_parcels = async (phone_number) => {
@@ -57,23 +58,28 @@ export const sendPackage = async (data) => {
         id
       );
       const sendedCollectionRef = doc(db, "parcels", data.phone, "sended", id);
+      let dataObject = {
+        sender: data.phone,
+        inbox: ordererInbox,
+        phone_number: data.phone_number,
+        email: data.email,
+        title: data.title,
+        id: id,
+      };
       try {
-        const orderedRef = await setDoc(orderedCollectionRef, {
-          sender: data.phone_number,
-          inbox: ordererInbox,
-          phone_number: data.phone_number,
-          email: data.email,
-          title: data.title,
-          id: id,
-        });
-        const sendRef = await setDoc(sendedCollectionRef, {
-          sender: data.phone,
-          inbox: ordererInbox,
-          phone_number: data.phone_number,
-          email: data.email,
-          title: data.title,
-          id: id,
-        });
+        if(data.image) {
+          const uuid = crypto.randomUUID();
+          const imagesRef = storageRef(storage, `images/${uuid}`);
+          await uploadBytes(imagesRef, data.image);
+          dataObject["image"] = uuid;
+        }
+      } catch {
+        return "Error uploading image.";
+      }
+
+      try {
+        await setDoc(orderedCollectionRef, dataObject);
+        await setDoc(sendedCollectionRef, dataObject);
         return "Packages successfully added.";
       } catch (error) {
         console.error("Error adding documents: ", error);
@@ -121,3 +127,13 @@ export const remove_package = async (data) => {
     console.error("Error removing document: ", error);
   }
 };
+
+export const getImageUrl = async (uuid) => {
+  try {
+    const imagesRef = storageRef(storage, `images/${uuid}`);
+    const url = await getDownloadURL(imagesRef);
+    return url;
+  } catch (error) {
+    console.error(error);
+  }
+}

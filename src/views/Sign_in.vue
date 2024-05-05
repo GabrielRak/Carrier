@@ -26,6 +26,15 @@
       </button>
       <p class="text-red-500">{{ error }}</p>
     </form>
+<br>
+    <button
+        type="click"
+        class="text-white text-lg bg-emerald-500 rounded-2xl w-56 px-4 py-2 font-md"
+        @click="signInGoogle">
+        Sign In with Google
+    </button>
+<br>
+
 
     <div class="fixed bottom-6 sm:relative mt-10 z-10 text-center">
       <span class="text-lg text-white sm:text-black"
@@ -61,9 +70,13 @@ export default {
       });
     };
 
+    const signInGoogle = () => {
+      store.dispatch("auth/loginGoogle");
+    };
+
     const error = computed(() => store.state.auth.authError);
 
-    return { email, password, doSignIn, error };
+    return { email, password, doSignIn, signInGoogle, error };
   },
 };
 </script>
