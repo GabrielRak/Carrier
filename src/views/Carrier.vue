@@ -31,6 +31,7 @@ import StyledInput from "../components/StyledInput.vue";
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { computed } from "vue";
+import {useRouter} from "vue-router"; 
 export default {
   components: {
     Header,
@@ -44,6 +45,7 @@ export default {
     // const name = ref("");
     // const surname = ref("");
     const message = ref("");
+    const router = useRouter();
     const uid = computed(() => store.state.auth.uid);
     const phone_number = computed(() => store.state.user.phone_number);
     const email = computed(() => store.state.user.email);
@@ -54,8 +56,10 @@ export default {
         email: email.value,
         uid: uid.value,
         message: message.value,
-      });}
+      });
+      router.push("/profile");}
     return { BecomeCarrier, Header, Navbar, message };
+
   },
 };
 </script>
