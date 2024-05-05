@@ -71,7 +71,8 @@ export default {
         title: title.value,
         phone: phone.value,
       });
-    };
+      navigator.vibrate(200);
+      console.log("vibrating")}; // is this working - i think it is? 
     return { sendParcel, store, phone_number, email, inboxes, title, error };
   },
 };

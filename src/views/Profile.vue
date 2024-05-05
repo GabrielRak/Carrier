@@ -23,6 +23,13 @@
           </button></RouterLink
         >
       </div>
+      <div v-if="!isCarrier">
+        <RouterLink to="/carrier"
+          ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
+            Become a carrier
+          </button></RouterLink
+        >
+      </div>
       <button
         class="bg-emerald-400 text-white py-2 w-48 my-4"
         @click="editView = !editView"

@@ -46,8 +46,10 @@ export default {
                 id: props.packageId,
                 sender: sender,
             });
+            navigator.vibrate(200);
+            console.log("vibrating")
         };
-
+        
         return { Header, Navbar, packageDetails, pickup, collectPackage };
     },
 };
