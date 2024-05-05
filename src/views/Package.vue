@@ -7,6 +7,7 @@
         <b>Inbox : {{ packageDetails.inbox }}</b><br />
         <b>Email : {{ packageDetails.email }}</b><br />
         <b>Title : {{ packageDetails.title }}</b><br />
+        <b v-if="imageUrl">Image : <img :src="imageUrl" alt="package image" /></b><br />
         <button @click="pickup = !pickup">Collect</button>
     </div>
     <div v-if="pickup">
@@ -33,6 +34,7 @@ export default {
         const pickup = ref(false);
         const phone_number = computed(() => store.state.user.phone_number);
         const packageDetails = computed(() => store.state.parcels.package);
+        const imageUrl = computed(() => store.state.parcels.imageUrl);
         onBeforeMount(() => {
             store.dispatch("parcels/fetchPackageDetails", {
                 phone_number: phone_number.value,
@@ -48,7 +50,7 @@ export default {
             });
         };
 
-        return { Header, Navbar, packageDetails, pickup, collectPackage };
+        return { Header, Navbar, imageUrl, packageDetails, pickup, collectPackage };
     },
 };
 </script>

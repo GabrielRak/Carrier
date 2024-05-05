@@ -4,8 +4,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc, getDoc } from "firebase/firestore";
 import router from "../router/index.js";
 const state = {
   uid: null,
@@ -35,8 +37,9 @@ const actions = {
         setDoc(docRef, {
           uid: user.uid,
           email: email,
+        }).then(() => {
+          router.push("/profile");
         });
-        router.push("/login");
       })
       .catch(() => {
         commit("setAuthError", "Address email already taken");
@@ -53,6 +56,31 @@ const actions = {
       })
       .catch(() => {
         commit("setAuthError", "Wrong Credentials");
+      });
+  },
+  async loginGoogle({ commit }) {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(({ user }) => {
+        commit("setUser",{
+          email:user.email,
+          authorized:true,
+        });
+        const docRef = doc(db, "users", user.email);
+        getDoc(docRef).then((docSnap) => {
+          if (!docSnap.exists()) {
+            setDoc(docRef, {
+              uid: user.uid,
+              email: user.email,
+            });
+            router.push("/profile");
+          } else {
+            router.push("/profile");
+          }
+        });
+      })
+      .catch(() => {
+        commit("setAuthError", "Failed");
       });
   },
   logout({ commit }) {

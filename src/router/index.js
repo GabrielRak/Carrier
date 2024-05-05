@@ -10,6 +10,7 @@ import Profile from "../views/Profile.vue";
 import Package from "../views/Package.vue";
 import Admin from "../views/Admin.vue";
 import Carrier from "../views/Carrier.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
