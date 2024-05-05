@@ -10,6 +10,7 @@ import Profile from "../views/Profile.vue";
 import Package from "../views/Package.vue";
 import Admin from "../views/Admin.vue";
 import Carrier from "../views/Carrier.vue";
+import Test from "../views/test.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -68,6 +69,11 @@ const router = createRouter({
       name:"carrier",
       component:Carrier,
       meta:{requiresCarrier:true}
+    },
+    {
+      path:"/test",
+      name:"test",
+      component:Test,
     }
   ],
 });

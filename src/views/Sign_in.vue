@@ -3,8 +3,8 @@
   <div
     class="text-center h-screen flex flex-col justify-center items-center w-screen"
   >
-    <h3 class="text-xl font-bold">Carriers</h3>
-    <p class="text-lg">Sign in to your account</p>
+    <h3 class="text-xl font-bold md:text-3xl lg:text-5xl">Carriers</h3>
+    <p class="text-lg md:text-xl lg:text-2xl">Sign in to your account</p>
     <form @submit.prevent="doSignIn">
       <StyledInput
         type="email"
