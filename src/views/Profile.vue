@@ -6,20 +6,28 @@
         src="../assets/Images/user.png"
         class="w-24 h-24 mx-auto rounded-full"
       />
-      <p>{{ userData.name }} {{ userData.surrname }}</p>
-      <p>{{ userData.phone_number }}</p>
-      <p>{{ userData.inbox }}</p>
+      <p class="mt-2 font-bold text-lg">{{ userData.name }} {{ userData.surrname }}</p>
+      <p class="mt-0 mb-6">{{ userData.phone_number }}</p>
       <div v-if="isAdmin">
         <RouterLink to="/admin"
-          ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
-            Adminuj
-          </button></RouterLink
+        ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
+          Adminuj
+        </button></RouterLink
         >
       </div>
-      <div v-if="isCarrier">
+      <div v-if="isCarrier" class="bg-green w-full py-6">
+        <RouterLink to="/carrier">
+          <div>
+            <p class="text-white text-lg font-semibold">Carrier</p>
+          </div>
+          </RouterLink
+          >
+        </div>
+      <p class="text-xl mt-6">Selected inbox : <span class="text-green font-bold">{{ userData.inbox }}</span></p>
+      <div v-if="!isCarrier">
         <RouterLink to="/carrier"
           ><button class="bg-emerald-400 text-white py-2 w-48 my-4">
-            Carrieruj
+            Become a carrier
           </button></RouterLink
         >
       </div>

@@ -1,17 +1,18 @@
 <template>
 <div>
     <Header :text="packageDetails.title" />
-    <div v-if="!pickup">
-        <b>Sender phone number :{{ packageDetails.sender }}</b><br />
-        <b>Receiver phone number : {{ packageDetails.phone_number }}</b><br />
-        <b>Inbox : {{ packageDetails.inbox }}</b><br />
-        <b>Email : {{ packageDetails.email }}</b><br />
-        <b>Title : {{ packageDetails.title }}</b><br />
-        <button @click="pickup = !pickup">Collect</button>
+    <div v-if="!pickup" class="flex flex-col items-center   ">
+        <img :src="imageUrl" alt="package image" v-if="imageUrl" class="w-44 h-auto mb-11"/>
+        <p><span class="font-semibold">Sender phone number :</span>{{ packageDetails.sender }}</p>
+        <p><span class="font-semibold">Receiver phone number : </span>{{ packageDetails.phone_number }}</p>
+        <p><span class="font-semibold">Inbox : </span>{{ packageDetails.inbox }}</p>
+        <p><span class="font-semibold">Email : </span>{{ packageDetails.email }}</p>
+        <p><span class="font-semibold">Title : </span>{{ packageDetails.title }}</p>
+        <button @click="pickup = !pickup" class="bg-emerald-400 text-white py-2 w-48 my-4">Collect</button>
     </div>
     <div v-if="pickup">
         <h2>Are you sure you are next to your package?</h2>
-        <button @click="collectPackage(packageDetails.sender)">Collect</button>
+        <button @click="collectPackage(packageDetails.sender)" class="bg-emerald-400 text-white py-2 w-48 my-4">Collect</button>
     </div>
     <Navbar />
 </div>
@@ -33,6 +34,7 @@ export default {
         const pickup = ref(false);
         const phone_number = computed(() => store.state.user.phone_number);
         const packageDetails = computed(() => store.state.parcels.package);
+        const imageUrl = computed(() => store.state.parcels.imageUrl);
         onBeforeMount(() => {
             store.dispatch("parcels/fetchPackageDetails", {
                 phone_number: phone_number.value,
@@ -46,9 +48,11 @@ export default {
                 id: props.packageId,
                 sender: sender,
             });
+            navigator.vibrate(200);
+            console.log("vibrating")
         };
 
-        return { Header, Navbar, packageDetails, pickup, collectPackage };
+        return { Header, Navbar, imageUrl, packageDetails, pickup, collectPackage };
     },
 };
 </script>

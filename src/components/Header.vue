@@ -1,9 +1,7 @@
 <template>
-  <header class="lg:hidden">
+  <header class="lg:hidden w-full">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="375"
-      height="70"
       fill="none"
       viewBox="0 0 375 70"
     >

@@ -24,10 +24,14 @@
           v-model="title"
           placeholder="Big package*"
         />
-
+        <label for="myImage" class="text-white bg-gray-500 px-4 py-2 font-md">
+          Add image
+        </label>
+        <input type="file" style="display: none;" id="myImage" name="myImage" accept="image/*" @change="imageUpload"/>
+        <br><br>
         <button
           type="submit"
-          class="text-white bg-emerald-500 px-4 py-2 font-md"
+          class="text-white bg-emerald-500 px-4 py-2 font-md w-56 rounded-xl"
         >
           Send parcel</button
         ><br />
@@ -51,28 +55,47 @@ export default {
     StyledInput,
   },
 
+
+
   setup() {
     const store = useStore();
     const phone_number = ref("");
     const email = ref("");
+    const file = ref("");
     const title = ref("");
     const uid = computed(() => store.state.auth.uid);
     const phone = computed(() => store.state.user.phone_number);
+
+    const imageUpload = (event) => {
+      file.value = event.target.files[0];
+    };
+
     onBeforeMount(() => {
       store.dispatch("parcels/fetchInboxes");
     });
     const inboxes = computed(() => store.state.parcels.inboxes);
     const error = computed(() => store.state.parcels.errorMsg);
     const sendParcel = async () => {
-      store.dispatch("parcels/sendParcel", {
+      let objectData = {
         phone_number: phone_number.value,
         email: email.value,
         uid: uid.value,
         title: title.value,
         phone: phone.value,
-      });
-    };
-    return { sendParcel, store, phone_number, email, inboxes, title, error };
-  },
+      };
+      console.log(file.value);
+      if(file.value) {
+        console.log("jestem w ifie")
+        objectData = {
+          ...objectData,
+          image: file.value,
+        };
+      }
+      console.log(objectData);
+      store.dispatch("parcels/sendParcel", objectData);
+      navigator.vibrate(200);
+      console.log("vibrating")}; // is this working - i think it is? 
+    return { sendParcel, imageUpload, store, phone_number, email, inboxes, title, error };
+  }
 };
 </script>
