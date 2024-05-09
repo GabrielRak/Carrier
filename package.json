@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --host 0.0.0.0",
     "dev": "vite",
-    "build": "vue-cli-service build",
+    "build": "vite build",
     "lint": "vue-cli-service lint",
     "preview": "vite preview"
   },

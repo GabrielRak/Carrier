@@ -19,12 +19,12 @@ export default defineConfig({
         theme_color: '#52e08c',
         icons: [
           {
-            src: './src/assets/Icons/pwa-192x192.png',
+            src: 'pwa-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: './src/assets/Icons/pwa-512x512.png',
+            src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }
